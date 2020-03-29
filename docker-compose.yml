@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - ~/mongo:/data/db
+    ports:
+      - 2550:27017
+
+  nms:
+    build: ./nms
+    restart: always
+    volumes:
+      - ~/nms_volume:/nms/M
+    environment:
+      ISDOCKER: ok
+    ports:
+      - 1935:1935
+
+  livevod-backend:
+    build: ./livevod
+    restart: always
+    volumes:
+      - ~/uploads:/livevod-backend/uploads
+    environment:
+      FBTOKEN: EAAC7ONV2RUYBAGoZCqNUtJzwlNzuDW9375dLAJ60FIb2iOkkJDy662YZBBwVz9CDRmkErluoe1rfpSUM5QoAtudZCyj9Dfe3HPTj15fe8efAp5ZBIB2G9n2vZCJ3WtGYmWLcNrYgoTkxwrof7pEVWl6L4cI6qRWgmUxqCn7hCRYvfIl21eW3gQnKLnMWpeMcZD
+      
+  nginx:
+    build: ./nginx-1.16.1
+    restart: always
+    volumes:
+      - ~/uploads:/uploads
+    ports:
+      - 80:80
+
+  redis:
+    image: redis
+    restart: always
